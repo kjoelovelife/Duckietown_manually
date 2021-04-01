@@ -32,7 +32,7 @@ if [[ `id -u` -eq 0 ]] ; then
 fi
 
 #==== step 1. Install Ubuntu ====  
-
+sudo apt update
 
 
 #==== step 2. Basic dependencies ====
@@ -137,5 +137,6 @@ echo "Great! If you want to view your account for information of AIDO, you can t
 echo "Finally if you don't have accounts for Github and DockerHub, please apply by :"
 echo "Github: https://github.com/join"
 echo "DockerHub: https://hub.docker.com/signup"
+echo "Awesome! Please type \"dts\" to update duckietown-shell"
 printf "\E[0m"
 echo "====================================="
