@@ -132,3 +132,4 @@ dmypy.json
 # ROS
 DB21M/catkin_ws/build
 DB21M/catkin_ws/devel
+DB21M/catkin_ws/.catkin_workspace
