@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- start basic args -->
+    <arg name="veh" default="$(env VEHICLE_NAME)"/>
+    <arg name="pkg_name" default="adjust"/>    
+    <arg name="node_name" default="lane_controller_reconfigure"/>
+
+    <!-- start node -->>
+    <node  ns="$(arg veh)" pkg="$(arg pkg_name)" type="$(arg node_name).py" name="$(arg node_name)" output="screen" />
+    
+</launch>
