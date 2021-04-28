@@ -10,37 +10,67 @@ class LANE_CONTROLLER_RECONFIGURE(object):
     def __init__(self):
         self.node_name = rospy.get_name()
         self.veh_name = self.node_name.split("/")[1]
+        self.target_node_name =  "/" + self.veh_name + "/lane_controller_node"
         self.initialize = True   
     
         ## wait for topic
-        self.wait_for_message = rospy.wait_for_message( "/" + self.veh_name + "/lane_controller_node/car_cmd", Twist2DStamped)
+        self.wait_for_message = rospy.wait_for_message("/" + self.veh_name + "/lane_controller_node/car_cmd", Twist2DStamped)
         rospy.loginfo("[{}] Node Start! Please use rqt_reconfigure to adjust parameter for [lane_controller_node]!".format(self.node_name))
 
         # setup parameter
-
-
+        self.lane_controller_node_param = {
+            "d_offset": 0.0,
+            "d_resolution": 0.0,
+            "d_thres": 0.0,
+            "integral_bounds/d/bot": 0.0,
+            "integral_bounds/d/top": 0.0,
+            "integral_bounds/phi/bot": 0.0,
+            "integral_bounds/phi/top": 0.0,
+            "k_Id": 0.0,
+            "k_Iphi": 0.0,
+            "k_d": 0.0,
+            "k_theta": 0.0,
+            "omega_ff": 0,
+            "phi_resolution": 0.0,
+            "stop_line_slowdown/end": 0.0,
+            "stop_line_slowdown/start": 0.0,
+            "theta_thres": 0.0,
+            "v_bar": 0.0,
+            "verbose": 0,
+        }
+        self.last_lane_controller_node_param = {}
+        for key in self.lane_controller_node_param.keys():
+            self.lane_controller_node_param[key] = rospy.get_param(self.target_node_name + "/" + key, self.lane_controller_node_param[key])          
+            self.last_lane_controller_node_param[key] = self.lane_controller_node_param[key]
         # create service
         #self.srv_save = rospy.Service("~save_calibration", Empty, self.cbSrvSaveCalibration) 
 
         # start rqt_reconfig
-        #self.reconfigure = Server(lane_controller_nodeConfig, self.rqt_callback)
+        self.reconfigure = Server(lane_controller_nodeConfig, self.rqt_callback)
 
     def rqt_callback(self, config, level):
         if self.initialize == True:
-            for keys in self.yaml_dict:
-                config[keys] = self.yaml_dict[keys]
+            for keys in self.lane_controller_node_param.keys():
+                if keys.find("/") >= 0:
+                    list_keys = list(keys)
+                    key_in_reconfigure = keys.replace("/", "_")
+                    config[key_in_reconfigure] = self.lane_controller_node_param[keys]
+                else:
+                    config[keys] = self.lane_controller_node_param[keys]
             self.initialize = False
         else:
-            for keys in self.yaml_dict:
-                self.yaml_dict[keys] = config[keys]
-        return config
+            for keys in self.lane_controller_node_param.keys():
+                if keys.find("/") >= 0:
+                    key_in_reconfigure = keys.replace("/", "_")
+                    self.lane_controller_node_param[keys] = config[key_in_reconfigure]
+                else:
+                    self.lane_controller_node_param[keys] = config[keys]
+                if self.lane_controller_node_param[keys] != self.last_lane_controller_node_param[keys]:
+                    rospy.loginfo("[{}] set param {}: {}".format(self.node_name, keys, self.lane_controller_node_param[keys])) 
+                    rospy.set_param(self.target_node_name + "/" + keys, self.lane_controller_node_param[keys])
+                    self.last_lane_controller_node_param[keys] = self.lane_controller_node_param[keys]
 
-    def setup_parameter(self, param_name, default_value):
-        value = rospy.get_param(param_name, default_value)
-        # Write to parameter server for transparency
-        rospy.set_param(param_name, value)
-        rospy.loginfo("[%s] %s = %s " % (self.node_name, param_name, value))
-        return value
+        return config
 
     def on_shutdown(self): 
         rospy.is_shutdown=True
