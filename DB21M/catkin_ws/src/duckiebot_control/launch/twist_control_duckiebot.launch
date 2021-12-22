@@ -15,7 +15,7 @@
             <param name="target_node" type="str" value="$(arg target_node)"/>
         </node>
 
-        <!-- node inverse_kinematicreconfigure -->
+        <!-- node inverse_kinematic_reconfigure -->
         <node pkg="$(arg pkg_name)" name="inverse_kinematic_reconfigure" type="inverse_kinematic_reconfigure.py">
             <param name="target_node" type="str" value="kinematics_node"/>
         </node>
