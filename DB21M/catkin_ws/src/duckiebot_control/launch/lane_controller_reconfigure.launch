@@ -2,7 +2,7 @@
 <launch>
     <!-- start basic args -->
     <arg name="veh" default="$(env VEHICLE_NAME)"/>
-    <arg name="pkg_name" default="adjust"/>    
+    <arg name="pkg_name" default="duckiebot_control"/>    
     <arg name="node_name" default="lane_controller_reconfigure"/>
 
     <!-- start node -->>

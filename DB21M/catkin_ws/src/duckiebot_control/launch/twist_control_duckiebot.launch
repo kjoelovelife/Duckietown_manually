@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- start basic args -->
+    <arg name="vehicle" default="$(env VEHICLE_NAME)"/>
+    <arg name="pkg_name" default="duckiebot_control"/>    
+    <arg name="node_name" default="forward_twist_to_duckiebot"/>
+    <arg name="target_node" default="joy_mapper_node"/>
+
+    <!-- In the name space $(arg vehicle) -->
+    <group ns="$(arg vehicle)">
+        <!-- node forward_twist_to_duckiebot -->
+        <remap from="~cmd_vel" to="/cmd_vel"/>
+        <remap from="~car_cmd" to="/$(arg vehicle)/$(arg target_node)/car_cmd"/>
+        <node pkg="$(arg pkg_name)" name="$(arg node_name)" type="$(arg node_name).py" output="screen">
+            <param name="target_node" type="str" value="$(arg target_node)"/>
+        </node>
+
+        <!-- node inverse_kinematicreconfigure -->
+        <node pkg="$(arg pkg_name)" name="inverse_kinematic_reconfigure" type="inverse_kinematic_reconfigure.py">
+            <param name="target_node" type="str" value="kinematics_node"/>
+        </node>
+
+    </group>
+    
+    <!-- start node teleop_twist_keyboard-->
+    <node pkg="teleop_twist_keyboard" name="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen"/>
+
+
+</launch>

@@ -3,10 +3,10 @@ import os, sys, yaml
 import rospy, rospkg
 from std_srvs.srv import EmptyRequest, EmptyResponse, Empty
 from dynamic_reconfigure.server import Server
-from adjust.cfg import lane_controller_nodeConfig
-from adjust.msg import Twist2DStamped
+from duckiebot_msgs.cfg import LaneControllerNodeConfig
+from duckiebot_msgs.msg import Twist2DStamped
 
-class LANE_CONTROLLER_RECONFIGURE(object):
+class LaneControllerReconfigure(object):
     def __init__(self):
         self.node_name = rospy.get_name()
         self.veh_name = self.node_name.split("/")[1]
@@ -46,7 +46,7 @@ class LANE_CONTROLLER_RECONFIGURE(object):
         #self.srv_save = rospy.Service("~save_calibration", Empty, self.cbSrvSaveCalibration) 
 
         # start rqt_reconfig
-        self.reconfigure = Server(lane_controller_nodeConfig, self.rqt_callback)
+        self.reconfigure = Server(LaneControllerNodeConfig, self.rqt_callback)
 
     def rqt_callback(self, config, level):
         if self.initialize == True:
@@ -79,7 +79,6 @@ class LANE_CONTROLLER_RECONFIGURE(object):
 
 if __name__ == "__main__":
     rospy.init_node("lane_controller_reconfigure", anonymous = False)
-    lane_controller_reconfigure = LANE_CONTROLLER_RECONFIGURE()
+    lane_controller_reconfigure = LaneControllerReconfigure()
     rospy.on_shutdown(lane_controller_reconfigure.on_shutdown)
     rospy.spin()
-

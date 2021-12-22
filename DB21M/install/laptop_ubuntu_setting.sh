@@ -90,6 +90,10 @@ sudo adduser $USERNAME docker
 ## step 3-5. Make sureyou have docker-compose installed:
 sudo apt-get -y install docker-compose
 
+## step 3-6. solve problem Permission denied of sock
+sudo chmod 666 /var/run/docker.sock
+
+
 #==== Step4. Duckietwon Shell ====
 ## reference: https://github.com/duckietown/duckietown-shell
 ## Note: Duckietown Shell required Python 3.6 or higher.
