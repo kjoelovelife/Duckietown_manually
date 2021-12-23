@@ -18,7 +18,9 @@ else
 	export VEHICLE_NAME=$HOSTNAME
 	export ROS_MASTER_URI=http://$current_ip:11311
 fi
+export ROS_HOSTNAME=$current_ip
+
 echo "VEHICLE_NAME set to $VEHICLE_NAME"
 echo "ROS_MASTER_URI set to $ROS_MASTER_URI"
-echo "ROS_HOSTNAME set to $current_ip"
+echo "ROS_HOSTNAME set to $ROS_HOSTNAME"
 echo ""
