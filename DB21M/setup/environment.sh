@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 current_ip=$(hostname -I | awk '{print $1}')
-export workspace=$HOME/Duckietown_manually/DB21M
+workspace=$HOME/Duckietown_manually/DB21M
 echo "Setting up PYTHONPATH."
 export PYTHONPATH=$workspace/catkin_ws/src:$PYTHONPATH
 
 echo "Source workspace \"$workspace\"."
 source ~/Duckietown_manually/DB21M/catkin_ws/devel/setup.bash
-
+ 
 echo "Setting VEHICLE_NAME..."
 if [ $# -gt 0 ]; then
 	# provided a hostname, use it as ROS_MASTER_URI
